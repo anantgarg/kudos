@@ -19,7 +19,7 @@ function authenticate($force = 0) {
 
 	$loggedin = isLoggedIn();
 
-	if ($loggedin == 0 && !($controller == 'users' && ($action == 'login' || $action == 'validate' || $action == 'invite' || $action == 'register')) && !($controller == 'cron')&& !($controller == 'oops')) {
+	if ($loggedin == 0 && !($controller == 'users' && ($action == 'login' || $action == 'validate' || $action == 'invite' || $action == 'register')) && !($controller == 'cron') && !($controller == 'oops') && !($controller == 'install')) {
 		header("Location: ".BASE_URL."users/login");
 		exit;
 	}

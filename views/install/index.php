@@ -1,8 +1,8 @@
 	<div class="container spacer centered">
 		<div class="row">
-			<div><i class="logo fa fa-thumbs-o-up fa-5x"></i></div>
-			<h2>Success!</h2>
-			<p>Kudos has been successfully installed!</p>
+			<div><i class="fa fa-thumbs-up fa-5x"></i></div>
+			<h2>Kudos</h2>
+			<p>Installation successful!</p>
 		</div>
 	
 		<div class="spacer">
