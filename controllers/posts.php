@@ -21,7 +21,7 @@ function pre() {
 		$query->execute(array($_SESSION['user']['loggedin']));
 		$accounts = $query->fetchAll();
 	} else {
-		$query = $dbh->prepare("select * from accounts where accounts.active = 1");
+		$query = $dbh->prepare("select * from accounts where accounts.active = 1 order by name asc");
 		$query->execute(array());
 		$accounts = $query->fetchAll();
 	}
