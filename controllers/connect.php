@@ -156,7 +156,7 @@ function add() {
 			$query->execute(array(1,base64_decode($path[4]),base64_decode($path[5]),base64_decode($path[6]),base64_decode($path[7]),'twitter',base64_decode($path[3])));
 		} else {
 
-			$sql = "insert into accounts (type,name,data1,data2,data3,data4,active) VALUES (?,?,?,?,?,?)";
+			$sql = "insert into accounts (type,name,data1,data2,data3,data4,active) VALUES (?,?,?,?,?,?,?)";
 			$query = $dbh->prepare($sql);
 			$query->execute(array('twitter',base64_decode($path[4]),base64_decode($path[3]),base64_decode($path[5]),base64_decode($path[6]),base64_decode($path[7]),1));
 

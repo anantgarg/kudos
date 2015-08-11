@@ -12,10 +12,16 @@ define('DBNAME','');
 
 define('BASE_URL','http://localhost/kudos/');
 
+// Facebook integration
+
 define('FB_APPID','');
 define('FB_APPSECRET','');
 
+// Twitter integration
+
 define('TWITTER_APIKEY','');
 define('TWITTER_APISECRET','');
+
+// Use any random value. Do not change this value after installation.
 
 define('SERVER_SALT','');
