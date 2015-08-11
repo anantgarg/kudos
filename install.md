@@ -20,7 +20,7 @@
 3. Select Website
 4. Enter a name e.g. "Kudos for YourSite"
 5. Enter your site URL
-6. Go to the app dashboard and copy App ID & App Secret into the config.php file
+6. Go to the app dashboard and copy App ID & App Secret into the config.php file (No need to submit the app for review)
 7. Click on Facebook option in the Connect tab and follow the onscreen instructions
 
 
