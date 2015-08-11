@@ -7,3 +7,5 @@
 - Display testimonials
 - Import option
 - Export to JSON/PHP
+- Option to favourite/highlight testimonials
+- Date option in Add new post in custom channels
