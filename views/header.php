@@ -21,7 +21,7 @@
 	<link href="<?php echo BASE_URL;?>assets/css/jasny-bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<?php echo BASE_URL;?>assets/css/main.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL;?>assets/css/main.css?v=2" rel="stylesheet">
 
     <!-- Fonts from Google Fonts -->
 	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700" type="text/css" />
