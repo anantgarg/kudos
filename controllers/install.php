@@ -3,6 +3,7 @@
 function index() {
 
 	global $dbh;
+	global $template;
 
 	$dbversion = 1;
 
@@ -21,5 +22,6 @@ function index() {
 		$dbversion++;
 	}
 
+	$template->set('noextra','1');
 	
 }
