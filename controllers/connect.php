@@ -6,7 +6,7 @@ function index() {
 	global $dbh;
 	global $template;
 
-	$query = $dbh->prepare("select * from accounts where active = 1");
+	$query = $dbh->prepare("select * from accounts where active = 1 order by name asc");
 	$query->execute(array());
 	$accounts = $query->fetchAll();
 

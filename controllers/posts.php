@@ -17,7 +17,7 @@ function pre() {
 	}
 
 	if ($_SESSION['user']['type'] != 1) {
-		$query = $dbh->prepare("select accounts.* from accounts join users_accounts on accounts.id = users_accounts.accountid where users_accounts.userid = ? and accounts.active = 1");
+		$query = $dbh->prepare("select accounts.* from accounts join users_accounts on accounts.id = users_accounts.accountid where users_accounts.userid = ? and accounts.active = 1 order by name asc");
 		$query->execute(array($_SESSION['user']['loggedin']));
 		$accounts = $query->fetchAll();
 	} else {
