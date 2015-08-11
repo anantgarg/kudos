@@ -1,7 +1,6 @@
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `companyid` int(11) DEFAULT NULL,
-  `type` enum('facebook','twitter') DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `data1` text,
   `data2` text,
@@ -10,32 +9,37 @@ CREATE TABLE `accounts` (
   `active` int(11) DEFAULT '0',
   `record_created` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `inbox` (
+  `id` varchar(45) NOT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `user_name` varchar(255) DEFAULT NULL,
+  `user_description` text,
+  `user_avatar` varchar(255) DEFAULT NULL,
+  `user_handle` varchar(255) DEFAULT NULL,
+  `message` text,
+  `time` int(11) DEFAULT NULL,
+  `visible` int(1) DEFAULT '1',
+  `approved` int(1) DEFAULT '0',
+  `accountid` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`accountid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `companyid` int(11) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `active` int(1) DEFAULT '0',
   `type` int(1) DEFAULT '0',
   `record_created` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `companyid` int(11) DEFAULT NULL,
   `accountid` int(11) DEFAULT NULL,
   `userid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `companies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) DEFAULT NULL,
-  `plan` int(11) DEFAULT NULL,
-  `active` int(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 

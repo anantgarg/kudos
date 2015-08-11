@@ -10,10 +10,6 @@ define('BASE_URL','http://localhost/kudos/');
 define('FB_APPID','');
 define('FB_APPSECRET','');
 
-define('TWITTER_TOKEN','');
-define('TWITTER_SECRET','');
-
-
 define('TWITTER_APIKEY','');
 define('TWITTER_APISECRET','');
 
