@@ -11,6 +11,7 @@
 1. Go to https://apps.twitter.com/app/new
 2. Enter website & callback URL same as that of your kudos URL
 3. Go to "Keys and Access Tokens" tab and copy API Key and API Secret into the config.php file
+4. Click on Twitter option in the Connect tab and follow the onscreen instructions
 
 # Facebook integration
 
@@ -20,4 +21,18 @@
 4. Enter a name e.g. "Kudos for YourSite"
 5. Enter your site URL
 6. Go to the app dashboard and copy App ID & App Secret into the config.php file
+7. Click on Facebook option in the Connect tab and follow the onscreen instructions
 
+
+# Zendesk integration
+
+1. Click on Zendesk option in the Connect tab
+2. Enter a name for your new channel
+3. Add your login email (used for logging into Zendesk)
+4. Find your API key in Settings -> Channels -> API
+5. Enter your Zendesk URL e.g. "yoursite.zendesk.com"
+
+# Cron job
+
+1. Run yoursite.com/kudos/cron once every day to pull the latest feeds
+2. For the first time, you can also run it manually
