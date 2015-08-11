@@ -52,6 +52,11 @@ function pre() {
 			$accounts[$no]['image'] = $image;
 		}
 
+		if ($account['type'] == 'custom') {
+			$image = BASE_URL.'assets/img/custom.png';
+			$accounts[$no]['image'] = $image;
+		}
+
 		if ($current == $account['id']) {
 			$accounts[$no]['current'] = 1;
 			$currentpermission = 1;

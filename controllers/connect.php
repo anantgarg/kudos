@@ -26,6 +26,11 @@ function index() {
 			$image = BASE_URL.'assets/img/zendesk.png';
 			$accounts[$no]['image'] = $image;
 		}
+		
+		if ($account['type'] == 'custom') {
+			$image = BASE_URL.'assets/img/custom.png';
+			$accounts[$no]['image'] = $image;
+		}
 
 	}	
 
