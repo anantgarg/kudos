@@ -39,7 +39,8 @@ function checkPermission($permission) {
 }
 
 function hasPermission($permission) {
-	if ($_SESSION['user']['type'] > $permission) {
+
+	if (intval($_SESSION['user']['type']) > intval($permission)) {
 		return false;
 	}
 

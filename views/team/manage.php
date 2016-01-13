@@ -18,7 +18,7 @@
 				<select class="input-group selectpicker" name="role">
 					<option value="10" <?php if ($user['type'] == 10) { echo "selected"; }?>>Administrator</option>
 					<option value="100" <?php if ($user['type'] == 100) { echo "selected"; }?>>Manager</option>
-					<option value="100" <?php if ($user['type'] == 150) { echo "selected"; }?>>Member</option>
+					<option value="150" <?php if ($user['type'] == 150) { echo "selected"; }?>>Member</option>
 				  </select>
 			</div>
 
@@ -27,21 +27,13 @@
 				
 				<select class="image-picker" multiple="multiple" name="accounts[]">
 				<?php foreach ($accounts as $account):?>
-				<?php if ($account['type'] == 'facebook'):?>
-				<option data-img-src="https://graph.facebook.com/<?php echo $account['data1'];?>/picture" data-img-label="<?php echo $account['name'];?>" data-img-type="<?php echo $account['type'];?>" value="<?php echo $account['id'];?>" <?php if (in_array($account['id'],$present)) { echo "selected"; } ?>><?php echo $account['name'];?> (<?php echo $account['type'];?>)</option>
-				<?php endif;?>
 
-				<?php if ($account['type'] == 'twitter'):?>
-				<option data-img-src="<?php echo $account['data4'];?>" data-img-label="<?php echo $account['name'];?>" data-img-type="<?php echo $account['type'];?>" value="<?php echo $account['id'];?>" <?php if (in_array($account['id'],$present)) { echo "selected"; } ?>><?php echo $account['name'];?> (<?php echo $account['type'];?>)</option>
-				<?php endif;?>
-
-				<?php if ($account['type'] == 'zendesk'):?>
-				<option data-img-src="<?php echo BASE_URL;?>assets/img/zendesk.png" data-img-label="<?php echo $account['name'];?>" data-img-type="<?php echo $account['type'];?>" value="<?php echo $account['id'];?>" <?php if (in_array($account['id'],$present)) { echo "selected"; } ?>><?php echo $account['name'];?> (<?php echo $account['type'];?>)</option>
-				<?php endif;?>
 				
-				<?php if ($account['type'] == 'custom'):?>
-				<option data-img-src="<?php echo BASE_URL;?>assets/img/custom.png" data-img-label="<?php echo $account['name'];?>" data-img-type="<?php echo $account['type'];?>" value="<?php echo $account['id'];?>" <?php if (in_array($account['id'],$present)) { echo "selected"; } ?>><?php echo $account['name'];?> (<?php echo $account['type'];?>)</option>
-				<?php endif;?>
+
+				<option data-img-src="<?php echo $integrations[$account['type']]['icon'];?>" data-img-label="<?php echo $account['name'];?>" data-img-type="<?php echo $account['type'];?>" value="<?php echo $account['id'];?>" <?php if (in_array($account['id'],$present)) { echo "selected"; } ?>><?php echo $account['name'];?> (<?php echo $account['type'];?>)</option>
+
+
+			
 
 				<?php endforeach;?>
 				</select>

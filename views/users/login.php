@@ -17,7 +17,9 @@
 			<button name="type" type="submit" value="login" class="btn btn-primary">Sign in</button>
 		</div>
 		<div class="spacer-sm">
+			<?php if (empty($accountexists)):?>
 			<a href="<?php echo BASE_URL;?>users/register">No account as yet? Register</a>
+			<?php endif;?>
 		</div>
 
 

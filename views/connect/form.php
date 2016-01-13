@@ -1,13 +1,13 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<h2>Add a custom channel</h2>
+				<h2>Add a form channel</h2>
 				<p>Enter your channel's name.</p>
 			</div>
 		</div>
 	</div>
 
-	<form action="<?php echo BASE_URL;?>connect/add/custom" method="post">
+	<form action="<?php echo BASE_URL;?>connect/add/form" method="post">
 	<div class="container">
 
 		<div class="row">

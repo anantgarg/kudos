@@ -5,6 +5,7 @@ checkPermission(1); // Owners Only
 function index() {
 	global $dbh;
 	global $template;
+	global $integrations;
 
 	$query = $dbh->prepare("select * from accounts where active = 1 order by name asc");
 	$query->execute(array());
@@ -12,7 +13,7 @@ function index() {
 
 	foreach ($accounts as $no => $account) {
 		
-		if ($account['type'] == 'facebook') {
+/*		if ($account['type'] == 'facebook') {
 			$image = 'https://graph.facebook.com/'.$account['data1'].'/picture';
 			$accounts[$no]['image'] = $image;
 		}
@@ -26,14 +27,20 @@ function index() {
 			$image = BASE_URL.'assets/img/zendesk.png';
 			$accounts[$no]['image'] = $image;
 		}
+
+		if ($account['type'] == 'appstore') {
+			$image = BASE_URL.'assets/img/custom.png';
+			$accounts[$no]['image'] = $image;
+		}
 		
 		if ($account['type'] == 'custom') {
 			$image = BASE_URL.'assets/img/custom.png';
 			$accounts[$no]['image'] = $image;
 		}
-
+*/
 	}	
-
+	
+	$template->set('integrations',$integrations);
 	$template->set('accounts',$accounts);
 }
 
@@ -204,14 +211,33 @@ function add() {
 
 	}
 
-	
-	if ($type == 'custom') {
+	if ($type == 'appstore') {
 
 		$name = $_POST['name'];
 
 		$sql = "insert into accounts (type,name,active) VALUES (?,?,?)";
 		$query = $dbh->prepare($sql);
-		$query->execute(array('custom',$name,1));
+		$query->execute(array('appstore',$name,1));
+
+	}
+	
+	if ($type == 'form') {
+
+		$name = $_POST['name'];
+
+		$sql = "insert into accounts (type,name,active) VALUES (?,?,?)";
+		$query = $dbh->prepare($sql);
+		$query->execute(array('form',$name,1));
+
+	}
+		
+	if ($type == 'showcase') {
+
+		$name = $_POST['name'];
+
+		$sql = "insert into accounts (type,name,active) VALUES (?,?,?)";
+		$query = $dbh->prepare($sql);
+		$query->execute(array('showcase',$name,1));
 
 	}
 

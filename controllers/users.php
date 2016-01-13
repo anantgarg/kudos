@@ -2,7 +2,21 @@
 
 function login() {
 	global $template;
+	global $dbh;
 
+	$query = $dbh->prepare("select * from users");
+	$query->execute(array());
+	$accounts = $query->fetchAll();
+
+	$accountexists = 0;
+
+	foreach ($accounts as $account) {
+		if (!empty($account['id'])) {
+			$accountexists = 1;
+		}
+	}
+
+	$template->set('accountexists',$accountexists);
 	$template->set('noextra','1');
 	$template->set('heading','login');
 	$template->set('title','Login');

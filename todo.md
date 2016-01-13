@@ -1,5 +1,5 @@
 - Javascript plugin: grid, embed (with multiple)
-- Ability to upload image for custom posts
+- Ability to upload image for form posts
 - Add new tag for new testimonials
 - Autodetect domain logo or email avatar
 - In editing have an option to reset to original
@@ -8,4 +8,6 @@
 - Import option
 - Export to JSON/PHP
 - Option to favourite/highlight testimonials
-- Date option in Add new post in custom channels
+- Date option in Add new post in form channels
+- Add date picker for form posts
+- Fix Team tab

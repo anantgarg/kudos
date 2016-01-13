@@ -522,3 +522,7 @@ h1 strong {
 html {
        overflow-y: scroll;
 }
+
+.thumbnail {
+	text-align: center;
+}

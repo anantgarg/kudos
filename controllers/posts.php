@@ -9,6 +9,7 @@ function pre() {
 	global $template;
 	global $dbh;
 	global $path;
+	global $integrations;
 
 	$current = 0;
 	
@@ -37,26 +38,6 @@ function pre() {
 			exit;
 		}
 
-		if ($account['type'] == 'facebook') {
-			$image = 'https://graph.facebook.com/'.$account['data1'].'/picture';
-			$accounts[$no]['image'] = $image;
-		}
-
-		if ($account['type'] == 'twitter') {
-			$image = $account['data4'];
-			$accounts[$no]['image'] = $image;
-		}
-
-		if ($account['type'] == 'zendesk') {
-			$image = BASE_URL.'assets/img/zendesk.png';
-			$accounts[$no]['image'] = $image;
-		}
-
-		if ($account['type'] == 'custom') {
-			$image = BASE_URL.'assets/img/custom.png';
-			$accounts[$no]['image'] = $image;
-		}
-
 		if ($current == $account['id']) {
 			$accounts[$no]['current'] = 1;
 			$currentpermission = 1;
@@ -81,6 +62,7 @@ function pre() {
 		exit;
 	}
 
+	$template->set('integrations',$integrations);
 	$template->set('current',$current);
 	$template->set('currenttype',$currenttype);
 	$template->set('accounts',$accounts);
@@ -105,6 +87,11 @@ function live() {
 			$comment['user_avatar'] = '//www.gravatar.com/avatar/'.md5($comment['user_avatar']).'?d=mm';
 		}
 
+		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
+			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
+		}
+
+
 	}
 
 	$template->set('comments',$comments);
@@ -127,6 +114,10 @@ function inbox() {
 
 		if(filter_var($comment['user_avatar'], FILTER_VALIDATE_EMAIL)) {
 			$comment['user_avatar'] = '//www.gravatar.com/avatar/'.md5($comment['user_avatar']).'?d=mm';
+		}
+
+		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
+			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
 		}
 
 	}
@@ -253,6 +244,12 @@ function add() {
 	global $path;
 	
  	$accountId = intval($path[2]);
+
+	$query = $dbh->prepare("select * from accounts where id = ?");
+	$query->execute(array($accountId));
+	$account = $query->fetch();
+
+	$template->set('acc',$account);
 	$template->set('accountid',$accountId);
 }
 
@@ -263,8 +260,113 @@ function addnow() {
 
 	$accountId = intval($path[2]);
 
-	$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
-	$query->execute(array($accountId,uniqid(),'custom',$_POST['name'],$_POST['description'],$_POST['avatar'],'',$_POST['comment'],time()));
+	$query = $dbh->prepare("select * from accounts where id = ?");
+	$query->execute(array($accountId));
+	$account = $query->fetch();
+
+	if ($account['type'] == 'appstore') {
+
+		if (!empty($_POST['url'])) {
+			if (strpos($_POST['url'],'apple') !== false) {
+
+				$id = 0;
+
+				if (strpos($_POST['url'],'/id') !== false) {
+
+					$location = strpos($_POST['url'],'/id');
+					$string = substr($_POST['url'], $location+3);
+
+					preg_match('/(\d+)/', $string, $match);
+
+					if (intval($match[0])) {
+						$id = $match[0];
+					}
+				}
+
+				if (!empty($id)) {
+					$content = file_get_contents("https://itunes.apple.com/lookup?id=".$id);
+					$json = json_decode($content, true);
+
+					$logo = $json['results'][0]['artworkUrl512'];
+					$name = $json['results'][0]['trackName'];
+					$seller = $json['results'][0]['sellerName'];
+					$url = $json['results'][0]['trackViewUrl'];
+					$description = $json['results'][0]['description'];
+
+					file_put_contents(BASE_DIR.'/data/'.'itunes_'.$id.".jpg", file_get_contents($logo));
+					
+					$logo = 'itunes_'.$id.".jpg";
+					
+					if (!empty($logo) && !empty($name) && !empty($seller) && !empty($url)) {
+						$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
+						$query->execute(array($accountId,'itunes_'.$id,'appstore',$name,$url,$logo,$seller,$description,time()));
+
+					}
+
+				}
+			}
+
+			if (strpos($_POST['url'],'google') !== false) {
+
+				$id = 0;
+
+				$parts = parse_url($_POST['url']);
+				parse_str($parts['query'], $query);
+				$id = $query['id'];
+
+				$content = file_get_contents($_POST['url']);
+
+				$doc = new DOMDocument();
+				libxml_use_internal_errors(true);
+				$doc->loadHTML($content);
+				$xpath = new DOMXPath($doc);
+
+				$nodes = $xpath->query("//img[@class='cover-image']");
+				$logo = $nodes->item(0)->getAttribute('src');
+
+				$nodes = $xpath->query("//div[@class='id-app-title']");
+				$name = $nodes->item(0)->nodeValue;
+
+				$nodes = $xpath->query("//div[@class='content']");
+				$seller = $nodes->item(6)->nodeValue;
+
+				$url = $_POST['url'];
+				$description = '';
+
+				file_put_contents(BASE_DIR.'/data/'.'google_'.$id.".jpg", file_get_contents('http:'.$logo));
+				$logo = 'google_'.$id.".jpg";
+
+		
+				
+				if (!empty($logo) && !empty($name) && !empty($seller) && !empty($url)) {
+					$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
+					$query->execute(array($accountId,'google_'.$id,'appstore',$name,$url,$logo,$seller,$description,time()));
+				}				
+
+			}
+		}
+	}
+
+	if ($account['type'] == 'form') {
+		$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
+		$query->execute(array($accountId,uniqid(),'form',$_POST['name'],$_POST['description'],$_POST['avatar'],'',$_POST['comment'],time()));
+	}
+
+	if ($account['type'] == 'showcase') {
+		$id = uniqid();
+		$imageFileType = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$target_file = BASE_DIR."/data/".$id.".".$imageFileType;
+		$file = $id.".".$imageFileType;
+
+		$check = getimagesize($_FILES["image"]["tmp_name"]);
+		if($check !== false) {
+			if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+				$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
+				$query->execute(array($accountId,$id,'form',$_POST['name'],$_POST['description'],$file,'',$_POST['comment'],time()));
+			}
+		}
+		
+	}
 
 	if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 		exit;

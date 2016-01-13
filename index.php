@@ -7,7 +7,7 @@ date_default_timezone_set('UTC');
 /* Debug Mode */
 
 error_reporting(E_ALL);
-ini_set('display_errors','off');
+ini_set('display_errors','on');
 ini_set('error_log', dirname(__FILE__).'/error.log');
 ini_set('log_errors', 'On');
     

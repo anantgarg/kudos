@@ -27,6 +27,7 @@ function manage(){
 	global $template;
 	global $path;
 	global $dbh;
+	global $integrations;
 
 	$userId = intval($path[2]);
 
@@ -38,14 +39,14 @@ function manage(){
 		error404();
 	}
 
-	$query = $dbh->prepare("select * from accounts");
+	$query = $dbh->prepare("select * from accounts where active = 1");
 	$query->execute(array());
 	$accounts = $query->fetchAll();
 
 	$template->set('accounts',$accounts);
 
 
-	$query = $dbh->prepare("select accounts.* from accounts join users_accounts on accounts.id = users_accounts.accountid where users_accounts.userid = ?");
+	$query = $dbh->prepare("select accounts.* from accounts join users_accounts on accounts.id = users_accounts.accountid where users_accounts.userid = ? and accounts.active = 1");
 	$query->execute(array($userId));
 	$access = $query->fetchAll();
 
@@ -55,6 +56,7 @@ function manage(){
 		$present[] = $account['id'];
 	}
 
+	$template->set('integrations',$integrations);
 	$template->set('present',$present);
 
 	$template->set('user',$user);

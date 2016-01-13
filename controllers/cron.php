@@ -38,47 +38,14 @@ function getcomments($accountId) {
 				$q['time'] = strtotime($comment['created_time']);
 				$q['accountid'] = $accountId;
 
+				file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));
+				$q['user_avatar'] = $q['id'].".jpg";
+					
+
 				$queue[] = $q;
  
 			}
 			
-
-		} catch(Exception $e) {
-		   $error = print_r($e,true);
-		}
-
-	}
-
-
-	if ($post['type'] == 'twitter') {
-		
-		try {
-
-		$params = array(
-			'count' => 200
-		);
-					
-		$twitter = new TwitterOAuth(TWITTER_APIKEY, TWITTER_APISECRET, $post['data2'], $post['data3']);
-		$comments = $twitter->get('statuses/mentions_timeline',$params);
-
-		foreach ($comments as $comment) {
-
-			$q = array();
-			$q['type'] = 'twitter';
-			$q['id'] = $comment->id_str;
-			$q['user_name'] = $comment->user->name;
-			$q['user_description'] = $comment->user->description;
-			$q['user_avatar'] = $comment->user->profile_image_url;
-			$q['user_handle'] = $comment->user->screen_name;
-			$q['message'] = $comment->text;
-			$q['time']= strtotime($comment->created_at);
-			$q['accountid'] = $accountId;
-		
-			if (substr($q['message'], 0, 3) != 'RT ') {
-				$queue[] = $q;
-			}
-
-		}
 
 		} catch(Exception $e) {
 		   $error = print_r($e,true);
@@ -114,6 +81,47 @@ function getcomments($accountId) {
 		} catch(Exception $e) {
 		   $error = print_r($e,true);
 		}
+
+	}
+
+	if ($post['type'] == 'twitter') {
+		
+		try {
+
+		$params = array(
+			'count' => 200
+		);
+					
+		$twitter = new TwitterOAuth(TWITTER_APIKEY, TWITTER_APISECRET, $post['data2'], $post['data3']);
+		$comments = $twitter->get('statuses/mentions_timeline',$params);
+
+		foreach ($comments as $comment) {
+			
+			$q = array();
+			$q['type'] = 'twitter';
+			$q['id'] = $comment->id_str;
+			$q['user_name'] = $comment->user->name;
+			$q['user_description'] = $comment->user->description;
+			$q['user_avatar'] = str_replace('normal','bigger',$comment->user->profile_image_url);
+			$q['user_handle'] = $comment->user->screen_name;
+			$q['message'] = $comment->text;
+			$q['time']= strtotime($comment->created_at);
+			$q['accountid'] = $accountId;
+
+
+			file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));
+			$q['user_avatar'] = $q['id'].".jpg";
+		
+			if (substr($q['message'], 0, 3) != 'RT ') {
+				$queue[] = $q;
+			}
+
+		}
+
+		} catch(Exception $e) {
+		   $error = print_r($e,true);
+		}
+
 	}
 
 	return $queue;
