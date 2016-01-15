@@ -11,35 +11,6 @@ function index() {
 	$query->execute(array());
 	$accounts = $query->fetchAll();
 
-	foreach ($accounts as $no => $account) {
-		
-/*		if ($account['type'] == 'facebook') {
-			$image = 'https://graph.facebook.com/'.$account['data1'].'/picture';
-			$accounts[$no]['image'] = $image;
-		}
-
-		if ($account['type'] == 'twitter') {
-			$image = $account['data4'];
-			$accounts[$no]['image'] = $image;
-		}
-
-		if ($account['type'] == 'zendesk') {
-			$image = BASE_URL.'assets/img/zendesk.png';
-			$accounts[$no]['image'] = $image;
-		}
-
-		if ($account['type'] == 'appstore') {
-			$image = BASE_URL.'assets/img/custom.png';
-			$accounts[$no]['image'] = $image;
-		}
-		
-		if ($account['type'] == 'custom') {
-			$image = BASE_URL.'assets/img/custom.png';
-			$accounts[$no]['image'] = $image;
-		}
-*/
-	}	
-	
 	$template->set('integrations',$integrations);
 	$template->set('accounts',$accounts);
 }
@@ -130,6 +101,49 @@ function twittercallback() {
 }
 
 function zendesk() {
+
+}
+
+function import() {
+	global $path;
+	global $template;
+
+	$accountId = $path[2];
+	$template->set('accountId',$accountId);
+}
+
+function importdata() {
+	global $path;
+	global $template;
+	global $dbh;
+
+	$accountId = $path[2];
+	eval($_POST['data']);
+
+	if (!empty($testimonials)) {
+		foreach ($testimonials as $t) {
+
+			if (empty($t['email'])) { $t['email'] = ''; }
+
+			$comment = $t['testimonial'];
+			$avatar = $t['email'];
+			$name = $t['author'];
+			$description = $t['company'];
+			$date = strtotime(str_replace('/', '-',$t['date']));
+
+			$uuid = md5($comment.$avatar.$name.$description);
+
+			$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
+			$query->execute(array($accountId,$uuid,'form',$name,$description,$avatar,'',$comment,$date));
+		}
+	}
+
+
+	$_SESSION['notification']['type'] = 'success';
+	$_SESSION['notification']['message'] = 'Data has been successfully imported.';
+
+	header("Location: ".BASE_URL."posts/live/".$accountId);
+	exit;
 
 }
 

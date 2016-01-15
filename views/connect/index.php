@@ -139,7 +139,12 @@
 					</div>
 					<div class="col-xs-10">
 						<h5 class="name"><?php echo $account['name'];?> (<?php echo ucwords($account['type']);?>)</h5>
-						<span class="category"><a class="confirmLink" href="<?php echo BASE_URL;?>connect/<?php echo $account['type'];?>">Reconnect</a> | <a class="confirmLink" href="<?php echo BASE_URL;?>connect/remove/<?php echo $account['id'];?>">Delete</a></span>
+						<span class="category"><!--<a class="confirmLink2" href="<?php echo BASE_URL;?>connect/<?php echo $account['type'];?>">Reconnect</a> | -->
+						<?php if ($account['type'] == 'form'):?>
+						<a class="confirmLink2" href="<?php echo BASE_URL;?>connect/import/<?php echo $account['id'];?>">Import</a> | 
+						<?php endif;?>
+						<a class="confirmLink" href="<?php echo BASE_URL;?>connect/remove/<?php echo $account['id'];?>">Delete</a>
+						</span>
 					</div>
 				</div>
 			</div>
