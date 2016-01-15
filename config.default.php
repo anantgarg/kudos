@@ -25,3 +25,18 @@ define('TWITTER_APISECRET','');
 // Use any random value. Do not change this value after installation.
 
 define('SERVER_SALT','');
+
+// Integrations
+
+define('BASE_DIR',dirname(__FILE__));
+
+$integrations = array(
+'facebook' => array('icon' => 'facebook'),
+'twitter' => array('icon' => 'twitter'),
+'zendesk' => array('icon' => 'circle-o'),
+'form' => array('icon' => 'pencil'),
+'appstore' => array('icon' => 'android'),
+'showcase' => array('icon' => 'star'),
+
+
+);

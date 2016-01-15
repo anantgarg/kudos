@@ -37,10 +37,12 @@ function getcomments($accountId) {
 				$q['message'] = $comment['message'];
 				$q['time'] = strtotime($comment['created_time']);
 				$q['accountid'] = $accountId;
+				
+				if (!is_file(BASE_DIR.'/data/'.$q['id'].".jpg")) {
+					file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));					
+				}
 
-				file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));
 				$q['user_avatar'] = $q['id'].".jpg";
-					
 
 				$queue[] = $q;
  
@@ -108,8 +110,10 @@ function getcomments($accountId) {
 			$q['time']= strtotime($comment->created_at);
 			$q['accountid'] = $accountId;
 
+			if (!is_file(BASE_DIR.'/data/'.$q['id'].".jpg")) {
+				file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));
+			}
 
-			file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));
 			$q['user_avatar'] = $q['id'].".jpg";
 		
 			if (substr($q['message'], 0, 3) != 'RT ') {
