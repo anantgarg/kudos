@@ -13,7 +13,7 @@
 		<div class="row">
 			
 			<div class="col-xs-12">
-				<textarea id="data" name="data" type="text" placeholder="" class="form-control"></textarea>
+				<textarea id="data" name="data" type="text" placeholder="$testimonials = array(array('testimonial' => 'X', 'date' => 'X', 'author' => 'X', 'email' => 'X', 'company' => 'X'));" class="form-control"></textarea>
 			</div>
 
 			<div class="col-xs-12 spacer-sm">

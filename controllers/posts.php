@@ -348,8 +348,9 @@ function addnow() {
 	}
 
 	if ($account['type'] == 'form') {
+		$uuid = md5($_POST['comment'].$_POST['avatar'].$_POST['name'].$_POST['description']);
 		$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
-		$query->execute(array($accountId,uniqid(),'form',$_POST['name'],$_POST['description'],$_POST['avatar'],'',$_POST['comment'],time()));
+		$query->execute(array($accountId,$uuid,'form',$_POST['name'],$_POST['description'],$_POST['avatar'],'',$_POST['comment'],time()));
 	}
 
 	if ($account['type'] == 'showcase') {
