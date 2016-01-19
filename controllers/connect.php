@@ -1,5 +1,9 @@
 <?php
 
+ini_set('max_execution_time', 300); 
+set_time_limit(0);
+
+
 checkPermission(1); // Owners Only
 
 function index() {
@@ -129,7 +133,7 @@ function importdata() {
 			$avatar = $t['email'];
 			$name = $t['author'];
 			$description = $t['company'];
-			$date = strtotime(str_replace('/', '-',$t['date']));
+			$date = strtotime(str_replace('/', '/',$t['date']));
 
 			$uuid = md5($comment.$avatar.$name.$description);
 
@@ -141,7 +145,6 @@ function importdata() {
 
 	$_SESSION['notification']['type'] = 'success';
 	$_SESSION['notification']['message'] = 'Data has been successfully imported.';
-
 	header("Location: ".BASE_URL."posts/live/".$accountId);
 	exit;
 

@@ -77,7 +77,7 @@ function live() {
 	
  	$accountId = intval($path[2]);
 
-	$query = $dbh->prepare("select * from inbox where visible = 1 and approved = 1 and accountid = ? order by id desc");
+	$query = $dbh->prepare("select * from inbox where visible = 1 and approved = 1 and accountid = ? order by `time` desc");
 	$query->execute(array($accountId));
 	$comments = $query->fetchAll();
 
@@ -106,7 +106,7 @@ function inbox() {
 	
  	$accountId = intval($path[2]);
 
-	$query = $dbh->prepare("select * from inbox where visible = 1 and approved = 0 and accountid = ? order by id desc limit 100");
+	$query = $dbh->prepare("select * from inbox where visible = 1 and approved = 0 and accountid = ? order by `time` desc limit 100");
 	$query->execute(array($accountId));
 	$comments = $query->fetchAll();
 
@@ -362,8 +362,8 @@ function addnow() {
 		$check = getimagesize($_FILES["image"]["tmp_name"]);
 		if($check !== false) {
 			if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-				$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
-				$query->execute(array($accountId,$id,'form',$_POST['name'],$_POST['description'],$file,'',$_POST['comment'],time()));
+				$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time,rating,category) values (?,?,?,?,?,?,?,?,?,?,?)");
+				$query->execute(array($accountId,$id,'form',$_POST['name'],$_POST['description'],$file,'',$_POST['comment'],time(),$_POST['rating'],$_POST['category']));
 			}
 		}
 		

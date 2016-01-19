@@ -60,69 +60,43 @@
 				</div>
 				
 				<div class="col-xs-12 spacer-sm">
-					<select name="industry" id="industry" size="1" class="form">
+					<select name="category" id="category" size="1" class="form">
 
 						<option value="">Industry</option>
-				
-						<option class="" value="Aerospace and Defense">Aerospace and Defense</option>
-					
-						<option class="" value="Automotive">Automotive</option>
-					
-						<option class="" value="Banking">Banking</option>
-					
-						<option class="" value="Building Materials">Building Materials</option>
-					
-						<option class="" value="Cargo Transport &amp; Logistics">Cargo Transport &amp; Logistics</option>
-					
-						<option class="" value="Chemicals">Chemicals</option>
-					
-						<option class="" value="Consumer Products">Consumer Products</option>
-					
-						<option class="" value="Defense and Security">Defense and Security</option>
-					
-						<option class="" value="Engineering, Construction and Operations">Engineering, Construction &amp; Operations</option>
-					
-						<option class="" value="Fabricated Metal Products">Fabricated Metal Products</option>
-					
-						<option class="" value="Forest Products, Furniture &amp; Textile">Forest Products, Furniture &amp; Textile</option>
-					
-						<option class="" value="Healthcare">Healthcare</option>
-					
-						<option class="" value="High Tech">High Tech</option>
-					
-						<option class="" value="Higher Education and Research">Higher Education and Research</option>
-					
-						<option class="" value="Industrial Machinery and Components">Industrial Machinery and Components</option>
-					
-						<option class="" value="Insurance">Insurance</option>
-					
-						<option class="" value="Life Sciences">Life Sciences</option>
-					
-						<option class="" value="Media">Media</option>
-					
-						<option class="" value="Mining">Mining</option>
-					
-						<option class="" value="Oil and Gas">Oil and Gas</option>
-					
-						<option class="" value="Passenger Travel &amp; Leisure">Passenger Travel &amp; Leisure</option>
-					
-						<option class="" value="Postal">Postal</option>
-					
-						<option class="" value="Primary Metals">Primary Metals</option>
-					
-						<option class="" value="Professional Services">Professional Services</option>
-					
-						<option class="" value=" Public Sector">Public Sector</option>
-					
-						<option class="" value="Retail">Retail</option>
-					
-						<option class="" value="Sports &amp; Entertainment">Sports &amp; Entertainment</option>
-					
-						<option class="" value="Telecommunications">Telecommunications</option>
-					
-						<option class="" value="Utilities">Utilities</option>
-					
-						<option class="" value="Wholesale Distribution">Wholesale Distribution</option>
+					    <option>Software Services</option>
+    <option>Finance</option>
+    <option>Manufacturing</option>
+    <option>Advertising</option>
+    <option>Architecture</option>
+    <option>Automobile</option>
+    <option>Aviation</option>
+    <option>BPO</option>
+    <option>Transportation</option>
+    <option>Government</option>
+    <option>Education</option>
+    <option>Electricals</option>
+    <option>Facility Management</option>
+    <option>FMCG</option> 
+    <option>Fashion</option>
+    <option>Hospitality</option>
+    <option>Insurance</option>
+    <option>IT Hardware</option>
+    <option>Research</option>
+    <option>News</option>
+    <option>Entertainment</option>
+    <option>E-commerce</option>
+    <option>Healthcare</option>
+    <option>Social Services</option>
+    <option>Office Automation</option>
+    <option>Infrastructure</option>
+    <option>Medical</option>
+    <option>Religious</option>
+    <option>Real Estate</option>
+    <option>Retail</option>
+    <option>Security</option>
+    <option>Electronics</option>
+    <option>Consulting</option>
+    <option>Other</option>
 		</select>
 				</div>
 
