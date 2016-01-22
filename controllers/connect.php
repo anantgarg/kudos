@@ -138,7 +138,7 @@ function importdata() {
 			$uuid = md5($comment.$avatar.$name.$description);
 	
 			if(filter_var($avatar, FILTER_VALIDATE_EMAIL)) {
-				$avatar = '//www.gravatar.com/avatar/'.md5($avatar).'?d=mm';
+				$avatar = 'http://www.gravatar.com/avatar/'.md5($avatar).'?d=mm';
 
 				if (!is_file(BASE_DIR.'/data/'.$uuid.".jpg")) {
 					file_put_contents(BASE_DIR.'/data/'.$uuid.".jpg", file_get_contents($avatar));
