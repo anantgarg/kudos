@@ -136,6 +136,16 @@ function importdata() {
 			$date = strtotime(str_replace('/', '/',$t['date']));
 
 			$uuid = md5($comment.$avatar.$name.$description);
+	
+			if(filter_var($avatar, FILTER_VALIDATE_EMAIL)) {
+				$avatar = '//www.gravatar.com/avatar/'.md5($avatar).'?d=mm';
+
+				if (!is_file(BASE_DIR.'/data/'.$uuid.".jpg")) {
+					file_put_contents(BASE_DIR.'/data/'.$uuid.".jpg", file_get_contents($avatar));
+				}
+
+				$avatar = $uuid.".jpg";
+			}
 
 			$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
 			$query->execute(array($accountId,$uuid,'form',$name,$description,$avatar,'',$comment,$date));

@@ -24,6 +24,20 @@ $('.confirmLink').on('click',  function(e) {
 
 });
 
+$('.confirmLinkImg').on('click',  function(e) {
+
+	e.stopPropagation();
+	e.preventDefault();
+
+	var url = $(this).attr("href");
+	var aid = $(this).attr("aid");
+
+	var data = $.get(url, function(data) { 
+		$('#avatar_'+aid).attr('src',data);
+	});
+
+});
+
 $('.editcomment').on('click',  function(e) {
 
 	e.stopPropagation();

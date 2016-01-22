@@ -83,10 +83,6 @@ function live() {
 
 	foreach ($comments as &$comment) {
 
-		if(filter_var($comment['user_avatar'], FILTER_VALIDATE_EMAIL)) {
-			$comment['user_avatar'] = '//www.gravatar.com/avatar/'.md5($comment['user_avatar']).'?d=mm';
-		}
-
 		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
 			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
 		}
@@ -111,10 +107,6 @@ function inbox() {
 	$comments = $query->fetchAll();
 
 	foreach ($comments as &$comment) {
-
-		if(filter_var($comment['user_avatar'], FILTER_VALIDATE_EMAIL)) {
-			$comment['user_avatar'] = '//www.gravatar.com/avatar/'.md5($comment['user_avatar']).'?d=mm';
-		}
 
 		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
 			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
@@ -238,6 +230,45 @@ function edit() {
 
 }
 
+function regenerateavatar() {
+	global $dbh;
+	global $template;
+	global $path;
+
+
+	$accountId = intval($path[2]);
+
+	if (!empty($path[3])) {
+		$postId = $path[3];		
+	} else {
+		$_SESSION['notification']['type'] = 'error';
+		$_SESSION['notification']['message'] = '<b>Oops!</b> Something went wrong.';
+		header("Location: ".$_SERVER['HTTP_REFERER']);
+		exit;
+	}
+
+	$image = '';
+	$random = json_decode(file_get_contents("http://uifaces.com/api/v1/random"));
+
+	if (!empty($random->image_urls->epic)) {
+		$avatar = $random->image_urls->epic;
+		file_put_contents(BASE_DIR.'/data/'.$postId.".jpg", file_get_contents($avatar));
+		$avatar = $postId.".jpg";
+	}
+
+	$query = $dbh->prepare("update inbox set user_avatar = ? where accountid = ? and id = ? limit 1");
+	$query->execute(array($avatar,$accountId, $postId));
+
+	if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+		echo BASE_URL.'data/'.$avatar;
+		exit;
+	}
+
+	header("Location: ".$_SERVER['HTTP_REFERER']);
+	exit;
+
+}
+
 function add() {
 	global $dbh;
 	global $template;
@@ -287,7 +318,7 @@ function addnow() {
 					$content = file_get_contents("https://itunes.apple.com/lookup?id=".$id);
 					$json = json_decode($content, true);
 
-					$logo = $json['results'][0]['artworkUrl512'];
+					$logo = $json['results'][0]['artworkUrl100'];
 					$name = $json['results'][0]['trackName'];
 					$seller = $json['results'][0]['sellerName'];
 					$url = $json['results'][0]['trackViewUrl'];
@@ -349,6 +380,17 @@ function addnow() {
 
 	if ($account['type'] == 'form') {
 		$uuid = md5($_POST['comment'].$_POST['avatar'].$_POST['name'].$_POST['description']);
+
+		if(filter_var($_POST['avatar'], FILTER_VALIDATE_EMAIL)) {
+			$_POST['avatar'] = 'http://www.gravatar.com/avatar/'.md5($_POST['avatar']).'?d=mm';
+
+			if (!is_file(BASE_DIR.'/data/'.$uuid.".jpg")) {
+				file_put_contents(BASE_DIR.'/data/'.$uuid.".jpg", file_get_contents($_POST['avatar']));
+			}
+
+			$_POST['avatar'] = $uuid.".jpg";
+		}
+
 		$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
 		$query->execute(array($accountId,$uuid,'form',$_POST['name'],$_POST['description'],$_POST['avatar'],'',$_POST['comment'],time()));
 	}
