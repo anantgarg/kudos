@@ -25,6 +25,7 @@ define('TWITTER_APISECRET','');
 // Use any random value. Do not change this value after installation.
 
 define('SERVER_SALT','');
+define('API_KEY','');
 
 // Integrations
 
