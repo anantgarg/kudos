@@ -43,6 +43,9 @@ function validate() {
 
 	if ($type == 'login') {
 
+		echo hasPassword($password);
+		exit;
+
 		$query = $dbh->prepare("select * from users where email = ? and password = ? and active = 1");
 		$query->execute(array($email,hashPassword($password)));
 		$account = $query->fetch();
