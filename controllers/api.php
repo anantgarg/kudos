@@ -86,3 +86,22 @@ function postscount() {
 	echo $comments;
 	exit;
 }
+
+function resize() {
+	$image = $_GET['image'];
+	$height = $_GET['height'];
+	$width = $_GET['width'];
+
+	$file = md5($image.$height.$width);
+
+	$ext = parse_url($image);
+	$ext = pathinfo($ext['path'], PATHINFO_EXTENSION);
+
+	if (!file_exists(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $file.".".$ext)) {	
+		$output = resizeImage(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $file.".".$ext,file_get_contents($image),$width,$height,1,'file');
+	}
+
+	header("HTTP/1.1 301 Moved Permanently"); 
+	header("Location: ".BASE_URL."cache/".$file.".".$ext."\r\n");
+	exit;
+}

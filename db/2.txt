@@ -1,2 +1,3 @@
+ALTER TABLE inbox
 ADD COLUMN `category` VARCHAR(255) NULL AFTER `accountid`,
 ADD COLUMN `rating` VARCHAR(255) NULL AFTER `category`;
