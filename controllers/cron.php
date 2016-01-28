@@ -75,6 +75,16 @@ function getcomments($accountId) {
 			$q['message'] = $comment->comment;
 			$q['time']= strtotime($comment->created_at);
 			$q['accountid'] = $accountId;
+
+			if(filter_var($q['user_avatar'], FILTER_VALIDATE_EMAIL)) {
+				$q['user_avatar'] = 'http://www.gravatar.com/avatar/'.md5($q['user_avatar']).'?d=mm';
+
+				if (!is_file(BASE_DIR.'/data/'.$q['id'].".jpg")) {
+					file_put_contents(BASE_DIR.'/data/'.$q['id'].".jpg", file_get_contents($q['user_avatar']));
+				}
+
+				$q['user_avatar'] = $q['id'].".jpg";
+			}
 		
 			$queue[] = $q;
 
