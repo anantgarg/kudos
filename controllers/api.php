@@ -105,3 +105,35 @@ function resize() {
 	header("Location: ".BASE_URL."cache/".$file.".".$ext."\r\n");
 	exit;
 }
+
+function addpost() {
+	global $dbh;
+	global $template;
+	global $path;
+	
+	$api_key = $path[2];
+ 	$accountId = $_GET['id'];
+
+	if ($api_key != API_KEY) {
+		echo "Incorrect API key";
+		exit;
+	}
+
+	$uuid = md5($_GET['comment'].$_GET['avatar'].$_GET['name'].$_GET['description']);
+
+	if(filter_var($_GET['avatar'], FILTER_VALIDATE_EMAIL)) {
+		$_GET['avatar'] = 'http://www.gravatar.com/avatar/'.md5($_GET['avatar']).'?d=mm';
+
+		if (!is_file(BASE_DIR.'/data/'.$uuid.".jpg")) {
+			file_put_contents(BASE_DIR.'/data/'.$uuid.".jpg", file_get_contents($_GET['avatar']));
+		}
+
+		$_GET['avatar'] = $uuid.".jpg";
+	}
+
+	$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
+	$query->execute(array($accountId,$uuid,'form',$_GET['name'],$_GET['description'],$_GET['avatar'],'',$_GET['comment'],time()));
+
+	echo "1";
+	exit;
+}
