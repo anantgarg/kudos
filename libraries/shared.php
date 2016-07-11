@@ -23,7 +23,7 @@ function authenticate($force = 0) {
 		header("Location: ".BASE_URL."users/login");
 		exit;
 	}
-	
+
 }
 
 function error404() {
@@ -56,17 +56,17 @@ function getLink() {
 }
 
 function sanitize($input,$type = "old") {
-	
+
 	switch ($type) {
-	case "int": 
+	case "int":
 		$input = filter_var($input, FILTER_SANITIZE_NUMBER_INT);
 	break;
 
-	case "string": 
+	case "string":
 		$input = filter_var($input, FILTER_SANITIZE_STRING);
 	break;
 
-	case "url": 
+	case "url":
 		$input = filter_var($input, FILTER_SANITIZE_URL);
 	break;
 
@@ -98,7 +98,7 @@ function createSlug($input) {
 	$input = filter_var($input, FILTER_SANITIZE_STRING);
 	$input = trim($input);
 	$input = preg_replace("/ /","-",$input);
-	$input = preg_replace("/[^+A-Za-z0-9\.\-]/", "", $input); 
+	$input = preg_replace("/[^+A-Za-z0-9\.\-]/", "", $input);
 	$input = preg_replace("/--/","-",$input);
 	return strtolower($input);
 }
@@ -135,6 +135,7 @@ function db() {
 	}
 	catch(PDOException $e) {
 		echo "We are experiencing very heavy load at the moment. Please try again in 10 minutes.";
+
 		file_put_contents('PDOErrors.txt', $e->getMessage(), FILE_APPEND);
 		exit;
 	}
@@ -163,7 +164,7 @@ function generatePassword($length=9, $strength=0) {
 	if ($strength & 8) {
 		$consonants .= '@#$%';
 	}
- 
+
 	$password = '';
 	$alt = time() % 2;
 	for ($i = 0; $i < $length; $i++) {
@@ -188,57 +189,57 @@ function hashPassword($password) {
 }
 
 
-function highlight($c,$q){ 
+function highlight($c,$q){
 $q=explode(' ',str_replace(array('','\\','+','*','?','[','^',']','$','(',')','{','}','=','!','<','>','|',':','#','-','_'),'',$q));
-for($i=0;$i<sizeOf($q);$i++) 
+for($i=0;$i<sizeOf($q);$i++)
 	$c=preg_replace("/($q[$i])(?![^<]*>)/i","<span class=\"highlight\">\${1}</span>",$c);
 return $c;}
 
 
- function excerpt($text, $phrase, $radius = 100, $ending = "...") { 
-       $phraseLen = strlen($phrase); 
-       if ($radius < $phraseLen) { 
-             $radius = $phraseLen; 
-         } 
+ function excerpt($text, $phrase, $radius = 100, $ending = "...") {
+       $phraseLen = strlen($phrase);
+       if ($radius < $phraseLen) {
+             $radius = $phraseLen;
+         }
 
 		 $phrases = explode (' ',$phrase);
-		 
+
 		 foreach ($phrases as $phrase) {
-			 $pos = strpos(strtolower($text), strtolower($phrase)); 
+			 $pos = strpos(strtolower($text), strtolower($phrase));
 			 if ($pos > -1) break;
 		 }
-  
-         $startPos = 0; 
-         if ($pos > $radius) { 
-             $startPos = $pos - $radius; 
-         } 
-  
-         $textLen = strlen($text); 
-  
-         $endPos = $pos + $phraseLen + $radius; 
-         if ($endPos >= $textLen) { 
-             $endPos = $textLen; 
-         } 
-  
-         $excerpt = substr($text, $startPos, $endPos - $startPos); 
-         if ($startPos != 0) { 
-             $excerpt = substr_replace($excerpt, $ending, 0, $phraseLen); 
-         } 
-  
-         if ($endPos != $textLen) { 
-             $excerpt = substr_replace($excerpt, $ending, -$phraseLen); 
-         } 
-  
-         return $excerpt; 
-   } 
+
+         $startPos = 0;
+         if ($pos > $radius) {
+             $startPos = $pos - $radius;
+         }
+
+         $textLen = strlen($text);
+
+         $endPos = $pos + $phraseLen + $radius;
+         if ($endPos >= $textLen) {
+             $endPos = $textLen;
+         }
+
+         $excerpt = substr($text, $startPos, $endPos - $startPos);
+         if ($startPos != 0) {
+             $excerpt = substr_replace($excerpt, $ending, 0, $phraseLen);
+         }
+
+         if ($endPos != $textLen) {
+             $excerpt = substr_replace($excerpt, $ending, -$phraseLen);
+         }
+
+         return $excerpt;
+   }
 
 function truncate ($text, $length = 200, $ending = "...") {
-	if (strlen($text) <= $length) { 
-		return $text; 
-	} else { 
-		$truncate = substr($text, 0, $length - strlen($ending)).$ending; 
+	if (strlen($text) <= $length) {
+		return $text;
+	} else {
+		$truncate = substr($text, 0, $length - strlen($ending)).$ending;
 		return $truncate;
-	} 
+	}
 }
 
 function sendemail($fromname,$fromaddress,$toemail,$subject,$body,$tag = null) {
@@ -520,15 +521,15 @@ if (!function_exists('getimagesizefromstring')) {
 
 function resizeImage($file,
                               $string             = null,
-                              $width              = 0, 
-                              $height             = 0, 
-                              $proportional       = false, 
-                              $output             = 'file', 
-                              $delete_original    = true, 
+                              $width              = 0,
+                              $height             = 0,
+                              $proportional       = false,
+                              $output             = 'file',
+                              $delete_original    = true,
                               $use_linux_commands = false,
   							  $quality = 100
   		 ) {
-     
+
 
     if ( $height <= 0 && $width <= 0 ) return false;
     if ( $file === null && $string === null ) return false;
@@ -552,7 +553,7 @@ function resizeImage($file,
       $final_height = ( $height <= 0 ) ? $height_old : $height;
 	  $widthX = $width_old / $width;
 	  $heightX = $height_old / $height;
-	  
+
 	  $x = min($widthX, $heightX);
 	  $cropWidth = ($width_old - $width * $x) / 2;
 	  $cropHeight = ($height_old - $height * $x) / 2;
@@ -564,8 +565,8 @@ function resizeImage($file,
       case IMAGETYPE_PNG:   $image = imagecreatefromstring($string);  break;
       default: return false;
     }
-    
-    
+
+
     # This is the resizing/resampling/transparency-preserving magic
     $image_resized = imagecreatetruecolor( $final_width, $final_height );
     if ( ($info[2] == IMAGETYPE_GIF) || ($info[2] == IMAGETYPE_PNG) ) {
@@ -585,8 +586,8 @@ function resizeImage($file,
       }
     }
     imagecopyresampled($image_resized, $image, 0, 0, $cropWidth, $cropHeight, $final_width, $final_height, $width_old - 2 * $cropWidth, $height_old - 2 * $cropHeight);
-	
-	
+
+
     # Taking care of original, if needed
     if ( $delete_original ) {
       if ( $use_linux_commands ) exec('rm '.$file);
@@ -608,7 +609,7 @@ function resizeImage($file,
       default:
       break;
     }
-    
+
     # Writing image according to type to the output destination and image quality
     switch ( $info[2] ) {
       case IMAGETYPE_GIF:   imagegif($image_resized, $output);    break;

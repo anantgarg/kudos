@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 ini_set('display_errors','on');
 ini_set('error_log', dirname(__FILE__).'/error.log');
 ini_set('log_errors', 'On');
-    
+
 /* Define */
 
 define('ROOT',DIRNAME(__FILE__));
@@ -27,6 +27,9 @@ if (get_magic_quotes_gpc() || (defined('FORCE_MAGIC_QUOTES'))) {
 	$_REQUEST = stripSlashesDeep($_REQUEST);
 	$_COOKIE = stripSlashesDeep($_COOKIE);
 }
+
+array_walk($_POST, function(& $val){$val=trim($val);});
+array_walk($_GET, function(& $val){$val=trim($val);});
 
 /* Start Session */
 
@@ -82,7 +85,7 @@ if (!defined('MINIMAL')) {
 		if (function_exists('pre')) {
 			pre();
 		}
-		
+
 		if (function_exists($action)) {
 			call_user_func($action);
 		} else {
@@ -93,7 +96,7 @@ if (!defined('MINIMAL')) {
 				error404();
 			}
 		}
-		
+
 		$template->render();
 
 		} else {

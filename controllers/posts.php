@@ -12,7 +12,7 @@ function pre() {
 	global $integrations;
 
 	$current = 0;
-	
+
 	if (!empty($path[2])) {
 		$current = intval($path[2]);
 	}
@@ -31,7 +31,7 @@ function pre() {
 	$currenttype = '';
 
 	foreach ($accounts as $no => $account) {
-		
+
 		// If no account selected, redirect to first account
 		if (empty($current)) {
 			header("Location: ".BASE_URL."posts/live/".$account['id']);
@@ -74,7 +74,7 @@ function live() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
  	$accountId = intval($path[2]);
 
 	$query = $dbh->prepare("select * from inbox where visible = 1 and approved = 1 and accountid = ? order by `time` desc");
@@ -82,6 +82,7 @@ function live() {
 	$comments = $query->fetchAll();
 
 	foreach ($comments as &$comment) {
+		$comment['user_avatar'] = strstr($comment['user_avatar'], '?', true) ?: $comment['user_avatar'];
 
 		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
 			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
@@ -99,7 +100,7 @@ function inbox() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
  	$accountId = intval($path[2]);
 
 	$query = $dbh->prepare("select * from inbox where visible = 1 and approved = 0 and accountid = ? order by `time` desc limit 100");
@@ -108,6 +109,8 @@ function inbox() {
 
 	foreach ($comments as &$comment) {
 
+		$comment['user_avatar'] = strstr($comment['user_avatar'], '?', true) ?: $comment['user_avatar'];
+
 		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
 			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
 		}
@@ -115,18 +118,18 @@ function inbox() {
 	}
 
 	$template->set('comments',$comments);
-	
+
 }
 
 function makelive() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
 	$accountId = intval($path[2]);
 
 	if (!empty($path[3])) {
-		$postId = $path[3];		
+		$postId = $path[3];
 	} else {
 		$_SESSION['notification']['type'] = 'error';
 		$_SESSION['notification']['message'] = '<b>Oops!</b> Something went wrong.';
@@ -149,11 +152,11 @@ function makehide() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
 	$accountId = intval($path[2]);
 
 	if (!empty($path[3])) {
-		$postId = $path[3];		
+		$postId = $path[3];
 	} else {
 		$_SESSION['notification']['type'] = 'error';
 		$_SESSION['notification']['message'] = '<b>Oops!</b> Something went wrong.';
@@ -177,11 +180,11 @@ function moveinbox() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
 	$accountId = intval($path[2]);
 
 	if (!empty($path[3])) {
-		$postId = $path[3];		
+		$postId = $path[3];
 	} else {
 		$_SESSION['notification']['type'] = 'error';
 		$_SESSION['notification']['message'] = '<b>Oops!</b> Something went wrong.';
@@ -210,7 +213,7 @@ function edit() {
 	$accountId = intval($path[2]);
 
 	if (!empty($path[3])) {
-		$postId = $path[3];		
+		$postId = $path[3];
 	} else {
 		$_SESSION['notification']['type'] = 'error';
 		$_SESSION['notification']['message'] = '<b>Oops!</b> Something went wrong.';
@@ -239,7 +242,7 @@ function regenerateavatar() {
 	$accountId = intval($path[2]);
 
 	if (!empty($path[3])) {
-		$postId = $path[3];		
+		$postId = $path[3];
 	} else {
 		$_SESSION['notification']['type'] = 'error';
 		$_SESSION['notification']['message'] = '<b>Oops!</b> Something went wrong.';
@@ -253,7 +256,7 @@ function regenerateavatar() {
 	if (!empty($random->image_urls->epic)) {
 		$avatar = $random->image_urls->epic;
 		file_put_contents(BASE_DIR.'/data/'.$postId.".jpg", file_get_contents($avatar));
-		$avatar = $postId.".jpg";
+		$avatar = $postId.".jpg?v=".time();
 	}
 
 	$query = $dbh->prepare("update inbox set user_avatar = ? where accountid = ? and id = ? limit 1");
@@ -273,7 +276,7 @@ function add() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
  	$accountId = intval($path[2]);
 
 	$query = $dbh->prepare("select * from accounts where id = ?");
@@ -325,9 +328,9 @@ function addnow() {
 					$description = $json['results'][0]['description'];
 
 					file_put_contents(BASE_DIR.'/data/'.'itunes_'.$id.".jpg", file_get_contents($logo));
-					
+
 					$logo = 'itunes_'.$id.".jpg";
-					
+
 					if (!empty($logo) && !empty($name) && !empty($seller) && !empty($url)) {
 						$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
 						$query->execute(array($accountId,'itunes_'.$id,'appstore',$name,$url,$logo,$seller,$description,time()));
@@ -367,12 +370,12 @@ function addnow() {
 				file_put_contents(BASE_DIR.'/data/'.'google_'.$id.".jpg", file_get_contents('http:'.$logo));
 				$logo = 'google_'.$id.".jpg";
 
-		
-				
+
+
 				if (!empty($logo) && !empty($name) && !empty($seller) && !empty($url)) {
 					$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
 					$query->execute(array($accountId,'google_'.$id,'appstore',$name,$url,$logo,$seller,$description,time()));
-				}				
+				}
 
 			}
 		}
@@ -391,6 +394,19 @@ function addnow() {
 			$_POST['avatar'] = $uuid.".jpg";
 		}
 
+		$id = uniqid();
+		$imageFileType = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$target_file = BASE_DIR."/data/".$id.".".$imageFileType;
+		$file = $id.".".$imageFileType;
+
+		if (!empty($_FILES["image"]["tmp_name"])) {
+			$check = getimagesize($_FILES["image"]["tmp_name"]);
+			if($check !== false) {
+				if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+					$_POST['avatar'] = $file;
+				}
+			}
+		}
 		$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
 		$query->execute(array($accountId,$uuid,'form',$_POST['name'],$_POST['description'],$_POST['avatar'],'',$_POST['comment'],time()));
 	}
@@ -408,7 +424,7 @@ function addnow() {
 				$query->execute(array($accountId,$id,'form',$_POST['name'],$_POST['description'],$file,'',$_POST['comment'],time(),$_POST['rating'],$_POST['category']));
 			}
 		}
-		
+
 	}
 
 	if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {

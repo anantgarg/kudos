@@ -9,13 +9,13 @@
 	<div class="row spacer-sm post">
 			<div class="col-xs-8">
 				<h5 class="name"><?php echo $comment['message'];?></h5>
-				<?php if (hasPermission(100)):?> 
-				<div class="category"><br/><a class="confirmLink" href="<?php echo BASE_URL;?>posts/move-inbox/<?php echo $comment['accountid'];?>/<?php echo $comment['id'];?>"><i class="fa fa-minus-square fa-3x"></i></a></div>
+				<?php if (hasPermission(100)):?>
+				<div class="category"><br/><a class="confirmLink" href="<?php echo BASE_URL;?>posts/move-inbox/<?php echo $comment['accountid'];?>/<?php echo $comment['id'];?>"><i class="fa fa-minus-square fa-3x"></i></a>  <a class="confirmLinkImg" href="<?php echo BASE_URL;?>posts/regenerate-avatar/<?php echo $comment['accountid'];?>/<?php echo $comment['id'];?>" aid="<?php echo $comment['id'];?>"><i class="fa fa-image fa-3x"></i></a></div>
 				<?php endif;?>
 			</div>
 
 			<div class="col-xs-4 pull-right">
-				<img class="social_image spacer-sm" src="<?php echo $comment['user_avatar'];?>" title="<?php echo $comment['user_name'];?>" rel="tooltip">
+				<img id="avatar_<?php echo $comment['id'];?>" class="social_image spacer-sm" src="<?php echo $comment['user_avatar'];?>" title="<?php echo $comment['user_name'];?>" rel="tooltip">
 				<p><?php echo $comment['user_name'];?></p>
 			</div>
 		<div style="clear:both"></div>

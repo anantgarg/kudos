@@ -8,7 +8,7 @@ function posts() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
 	$api_key = $path[2];
  	$accountId = $_GET['id'];
 
@@ -40,6 +40,8 @@ function posts() {
 
 	foreach ($comments as &$comment) {
 
+		$comment['user_avatar'] = strstr($comment['user_avatar'], '?', true) ?: $comment['user_avatar'];
+
 		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
 			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
 		}
@@ -58,7 +60,7 @@ function postscount() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
 	$api_key = $path[2];
  	$accountId = $_GET['id'];
 
@@ -94,14 +96,16 @@ function resize() {
 
 	$file = md5($image.$height.$width);
 
+	$image = strstr($image, '?', true) ?: $image;
+
 	$ext = parse_url($image);
 	$ext = pathinfo($ext['path'], PATHINFO_EXTENSION);
 
-	if (!file_exists(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $file.".".$ext)) {	
+	if (!file_exists(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $file.".".$ext)) {
 		$output = resizeImage(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $file.".".$ext,file_get_contents($image),$width,$height,1,'file');
 	}
 
-	header("HTTP/1.1 301 Moved Permanently"); 
+	header("HTTP/1.1 301 Moved Permanently");
 	header("Location: ".BASE_URL."cache/".$file.".".$ext."\r\n");
 	exit;
 }
@@ -110,7 +114,7 @@ function addpost() {
 	global $dbh;
 	global $template;
 	global $path;
-	
+
 	$api_key = $path[2];
  	$accountId = $_GET['id'];
 
@@ -118,6 +122,9 @@ function addpost() {
 		echo "Incorrect API key";
 		exit;
 	}
+
+	$_GET['avatar'] = trim($_GET['avatar']);
+	$_GET['name'] = trim($_GET['name']);
 
 	$uuid = md5($_GET['comment'].$_GET['avatar'].$_GET['name'].$_GET['description']);
 
@@ -128,7 +135,7 @@ function addpost() {
 			file_put_contents(BASE_DIR.'/data/'.$uuid.".jpg", file_get_contents($_GET['avatar']));
 		}
 
-		$_GET['avatar'] = $uuid.".jpg";
+		$_GET['avatar'] = $uuid.".jpg?v=".time();
 	}
 
 	$query = $dbh->prepare("insert ignore into inbox (accountid,id,type,user_name,user_description,user_avatar,user_handle,message,time) values (?,?,?,?,?,?,?,?,?)");
