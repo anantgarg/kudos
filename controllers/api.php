@@ -40,9 +40,9 @@ function posts() {
 
 	foreach ($comments as &$comment) {
 
-		$comment['user_avatar'] = strstr($comment['user_avatar'], '?', true) ?: $comment['user_avatar'];
+		$comment['user_avatar2'] = strstr($comment['user_avatar'], '?', true) ?: $comment['user_avatar'];
 
-		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar'])) {
+		if (is_file(BASE_DIR.'/data/'.$comment['user_avatar2'])) {
 			$comment['user_avatar'] = BASE_URL.'data/'.$comment['user_avatar'];
 		}
 
