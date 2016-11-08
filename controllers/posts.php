@@ -251,10 +251,21 @@ function regenerateavatar() {
 	}
 
 	$image = '';
+	
+	/*
 	$random = json_decode(file_get_contents("http://uifaces.com/api/v1/random"));
 
 	if (!empty($random->image_urls->epic)) {
 		$avatar = $random->image_urls->epic;
+		file_put_contents(BASE_DIR.'/data/'.$postId.".jpg", file_get_contents($avatar));
+		$avatar = $postId.".jpg?v=".time();
+	}
+	*/
+	
+	$random = json_decode(file_get_contents("https://randomuser.me/api"));
+
+ 	if (!empty($random->results[0]->picture->large)) {
+		$avatar = $random->results[0]->picture->large;
 		file_put_contents(BASE_DIR.'/data/'.$postId.".jpg", file_get_contents($avatar));
 		$avatar = $postId.".jpg?v=".time();
 	}
